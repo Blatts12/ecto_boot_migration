@@ -101,6 +101,7 @@ defmodule EctoBootMigration do
       stop_repos(repos_pids)
 
       log("Done")
+
       case migrations do
         [] ->
           {:ok, :noop}
@@ -220,10 +221,11 @@ defmodule EctoBootMigration do
 
   def log(msg), do: log(msg, debug?())
   def log(msg, true), do: IO.puts("[EctoBootMigration] #{msg}")
+
   def log(_msg, false) do
     # noop
   end
- 
+
   def debug? do
     Application.get_env(:ecto_boot_migration, :debug, false)
   end
@@ -237,7 +239,7 @@ defmodule EctoBootMigration do
   end
 
   defp priv_path_for(repo, filename) do
-    app = Keyword.get(repo.config, :otp_app)
+    app = Keyword.get(repo.config(), :otp_app)
     repo_underscore = repo |> Module.split() |> List.last() |> Macro.underscore()
     Path.join([priv_dir(app), repo_underscore, filename])
   end
